@@ -1,0 +1,170 @@
+<html>
+<head>
+    <title> Shrinidhi Sundaravadivelu</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+</head>
+<body>
+    <table style="width: 850px" cellspacing="5" cellpadding="5">
+    <tbody>
+    <tr>
+    <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+    <td style="vertical-align: top;">Shrinidhi Sundaravadivelu</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+    <td style="vertical-align: top;">19200656</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+    <td style="vertical-align: top;">
+    <p><a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct" target="_blank" rel="noopener">2016 Make Model Year Failures at NCT</a>.</p>
+    <p>The Road Safety Authority (RSA) has provided the following information relating to vehicle makes and models by the National Car Testing (NCT) Service in 2016. The various fields in the dataset include the VehicleMake (Vehicle Make), VehicleModel (Vehicle Model), YearOfBirth (Vehicle’s Year), Total (Total NCT completed by each car model), PASS (Success rate of NCT’s), FAIL (Failure rate of NCT’s) and the failure factors (factors the vehicles failed on). This dataset holds information about the Vehicles which have been tested by the NCT.</p>
+    </td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+    <td style="vertical-align: top;">What is the success and failure rate of the Vehicle made by the model ‘NISSAN’?</td>
+    </tr>
+    </tbody>
+    </table>
+    <hr />
+  <div id="vis" class="container"></div>
+  <script type="text/javascript">
+    var yourVlSpec =  {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/shrinidhiisundar/shrini/master/nct%20data.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.VehicleMake == 'NISSAN'"
+    },
+    {
+      "filter": "datum.Total >1"
+    }
+  ],
+  "title": {
+    "text": "Pass and Fail rate of NISSAN cars",
+    "anchor": "middle",
+    "fontSize": 18
+  },
+  "hconcat": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "aggregate": "mean",
+          "field": "PASS %",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "VehicleModel",
+          "type": "nominal",
+          "sort": {
+            "op": "mean",
+            "field": "PASS %",
+            "order": "descending"
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.VehicleModel == 'JUKE'",
+            "value": "black"
+          },
+          "value": "grey"
+        },
+        "tooltip": [
+          {
+            "field": "Total",
+            "type": "quantitative",
+            "aggregate": "sum"
+          },
+          {
+            "field": "PASS %",
+            "type": "quantitative",
+            "aggregate": "mean"
+          }
+        ]
+      }
+    },
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "aggregate": "mean",
+          "field": "FAIL %",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "VehicleModel",
+          "type": "nominal",
+          "sort": {
+            "op": "mean",
+            "field": "FAIL %",
+            "order": "ascending"
+          },
+          "axis": {
+            "title": null
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.VehicleModel == 'JUKE'",
+            "value": "black"
+          },
+          "value": "grey"
+        },
+        "tooltip": [
+          {
+            "field": "Total",
+            "type": "quantitative",
+            "aggregate": "sum"
+          },
+          {
+            "field": "FAIL %",
+            "type": "quantitative",
+            "aggregate": "mean"
+          }
+        ]
+      }
+    }
+  ]
+}
+
+        vegaEmbed("#vis", yourVlSpec);
+  </script>
+    <hr />
+<table style="width: 850px;" cellspacing="5" cellpadding="5">
+<tbody>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+<td style="vertical-align: top;">The visualization contains tow bar charts which represents:
+(1)	The mean pass percentage of various models of NISSAN sorted in descending order.
+(2)	The mean fail percentage of various models of NISSAN sorted in ascending order.
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Insight:</strong></td>
+<td style="vertical-align: top;">It can be observed from the visualization, that Model Juke has the highest pass percentage of 88.975 followed by Model Note which has a pass percentage of 67.38. Despite, Model NISSAN March leading the bar chart, it is not taken into consideration as the total number of tests taken is only 2. Two models of NISSAN namely ‘NV400’ and ‘SENTRA’ have zero pass percentage. It is also observed that 50% of the models introduced by NISSAN has pass percentage greater than 50%. This visualization gives an unambiguous indication of the best and the worst models of NISSAN.  </td>
+</tr>
+<tr>
+
+<td style="vertical-align: top;"><strong>Design considerations</strong></td>
+<td style="vertical-align: top;">I have used two separate bar charts which are vertically concatenated in which each bar in the graph denote a model made by ‘NISSAN’.I have assigned the colour grey to the bars and highlighted the model ‘Juke’ with a different colour as ‘NISSAN JUKE’ has the highest pass rate out of all the cars tested in NCT (https://www.collegetimes.com/life/cars-that-pass-the-nct-144758). I have sorted the Pass percentage graph in descending order and the Fail percentage graph in ascending order. While the graph is plotted with the mean values, I’ve added a tooltip displaying the sum and the mean of Total passed and the Total failed cars in NCT.
+I tried to put the success and failure within the same graph as two bars next to each other. But since the data was from two different fields, I was not able to achieve it. Also stacked bar charts dint clearly represent the data. Overall, the visualization is aided with proper labeling and vertical grid lines assist in reading the values from the bar chart. I dint find any other chart as efficient as bar chart for table-based data.
+</td>
+
+</tr>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+<td style="vertical-align: top;">I wanted to analyze different models of one vehicle make. I choose the brand NISSAN as one of the models of NISSAN has the best passing rate. I also omitted those models which was only tested once when they are grouped by Vehicle Models as the likelihood of the outcome may not be true.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

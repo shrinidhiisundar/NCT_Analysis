@@ -1,0 +1,128 @@
+<html>
+<head>
+    <title> Shrinidhi Sundaravadivelu</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+</head>
+<body>
+    <table style="width: 850px" cellspacing="5" cellpadding="5">
+    <tbody>
+    <tr>
+    <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+    <td style="vertical-align: top;">Shrinidhi Sundaravadivelu</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+    <td style="vertical-align: top;">19200656</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+    <td style="vertical-align: top;">
+    <p><a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct" target="_blank" rel="noopener">2016 Make Model Year Failures at NCT</a>.</p>
+    <p>The Road Safety Authority (RSA) has provided the following information relating to vehicle makes and models by the National Car Testing (NCT) Service in 2016. The various fields in the dataset include the VehicleMake (Vehicle Make), VehicleModel (Vehicle Model), YearOfBirth (Vehicle’s Year), Total (Total NCT completed by each car model), PASS (Success rate of NCT’s), FAIL (Failure rate of NCT’s) and the failure factors (factors the vehicles failed on). This dataset holds information about the Vehicles which have been tested by the NCT.</p>
+    </td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+    <td style="vertical-align: top;">How does the failure factor vary over years and does it follow any common pattern?</td>
+    </tr>
+    </tbody>
+    </table>
+    <hr />
+  <div id="vis" class="container"></div>
+  <script type="text/javascript">
+    var yourVlSpec =  {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "repeat": [
+    "Vehicle and Safety Equipment",
+    "Lighting and Electrical",
+    "Steering and Suspension",
+    "Braking Equipment",
+    "Wheels and Tyres",
+    "Engine, Noise and Exhaust",
+    "Chassis and Body",
+    "Side Slip Test",
+    "Suspension Test",
+    "Light test",
+    "Brake Test",
+    "Emmissions",
+    "OTHER",
+    "Incompletable"
+  ],
+  "columns": 7,
+  "title": {
+    "text": "Trend of the failure factors over years",
+    "anchor": "middle",
+    "fontSize": 20
+  },
+  "spec": {
+    "width": 125,
+    "height": 100,
+    "data": {
+      "url": "https://raw.githubusercontent.com/shrinidhiisundar/shrini/master/nct%20data.csv",
+      "format": {
+        "type": "csv"
+      }
+    },
+    "mark": "line",
+    "encoding": {
+      "y": {
+        "field": {
+          "repeat": "repeat"
+        },
+        "type": "quantitative",
+        "aggregate": "mean"
+      },
+      "x": {
+        "field": "YearOfBirth",
+        "type": "temporal",
+        "axis": {
+          "title": "Year Of Birth"
+        },
+        "scale": {"zero": false}  
+      },
+      "tooltip": {
+          "field":  {
+          "repeat": "repeat"
+        },
+        "type": "quantitative",
+        "aggregate": "sum"
+        },
+        "color": {"value": "DarkSlateBlue"}
+    }
+  },
+  "config": {
+    "axis": {"titleFontSize":10 , "titlePadding": 2, "labelFontSize": 8}
+  }
+}
+
+        vegaEmbed("#vis", yourVlSpec);
+  </script>
+    <hr />
+<table style="width: 850px;" cellspacing="5" cellpadding="5">
+<tbody>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+<td style="vertical-align: top;">This Visualization shows how the 14 failure (Vehicle and Safety Equipment, Lighting and Electrical, Steering and Suspension, Braking Equipment, Wheels and Tyres, Engine, Noise and Exhaust, Chassis and Body, Side Slip Test, Suspension Test, Light test, Brake Test, Emissions, OTHER, Incompletable) factors vary over time. The mean of these failure factors is plotted against the Year of the Vehicle being tested.</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Insight:</strong></td>
+<td style="vertical-align: top;">At the first glance of the visualization, you’ll find 13 out of the 14 (except Incompletable factor) failure factors possessing a similar shape of the graph when plotted against the Year of Vehicle being tested. All the graphs had a sudden increase in the 1990’s and in the late 2000’s the graph started to gradually reduce. This shows that in the early years the failure rate was negligible, followed by a sudden rise and then a gradual fall. Out of all the failure factors, the top three failure factors are ‘Lightning and Electrical’, ‘Steering and Suspension’ and ‘Wheels and Tyres’. 
+Another noticeable insight from the Visualization is that for the failure factor ‘Others’, there’s a noticeable peak in the early 1980’s. Failure factor ‘Incompletable’ has three sharp rise and falls between the years 1932 – 1965 and is random between the years 2005- 2016. This visualization can be compared with the first visualization of this assignment where we observed that most of the test were conducted between 2000 and 2008. We can conclude, that when the number of tests conducted were high, we observed an increased failure rate. Also, the ‘Lightning and Electrical’ should have been improved by car manufacturers as it had the highest mean of failure.
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Design considerations</strong></td>
+<td style="vertical-align: top;">The best way of observing the trend of an attribute is by using the ‘Line graph’. I’ve used the repeat function and plotted each of the failure factor separately with/against the Year the NCT was conducted. I’ve computed the mean of the failure rates as I found it as the effective way while studying the trends for each year. The column attribute in the coding specifies the number of graphs to be showed in each column. While the graph is plotted with the mean values, I’ve added a tooltip displaying the sum of Total failed Cars when the cursor is hovered over the graph. 
+The trend of the different failure factors can be plotted on the same graph using the layering function, but that would make the graph look clustered and ambiguous. ‘Concat’ function can also be used to obtain the above visualization, but that would make the code long and tedious. I’ve also added proper labelling to make clear of what the visualization represents and how repeat function makes the code modular.
+</td>
+</tr>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+<td style="vertical-align: top;">I choose to use the raw data and hence this visualization is done with no filtration. </td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

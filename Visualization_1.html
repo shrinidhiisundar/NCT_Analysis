@@ -1,0 +1,192 @@
+<html>
+<head>
+    <title> Shrinidhi Sundaravadivelu</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+</head>
+<body>
+    <table style="width: 850px" cellspacing="5" cellpadding="5">
+    <tbody>
+    <tr>
+    <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+    <td style="vertical-align: top;">Shrinidhi Sundaravadivelu</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+    <td style="vertical-align: top;">19200656</td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+    <td style="vertical-align: top;">
+    <p><a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct" target="_blank" rel="noopener">2016 Make Model Year Failures at NCT</a>.</p>
+    <p>The Road Safety Authority (RSA) has provided the following information relating to vehicle makes and models by the National Car Testing (NCT) Service in 2016. The various fields in the dataset include the VehicleMake (Vehicle Make), VehicleModel (Vehicle Model), YearOfBirth (Vehicle’s Year), Total (Total NCT completed by each car model), PASS (Success rate of NCT’s), FAIL (Failure rate of NCT’s) and the failure factors (factors the vehicles failed on). This dataset holds information about the Vehicles which have been tested by the NCT.</p>
+    </td>
+    </tr>
+    <tr>
+    <td style="vertical-align: top;"><strong>Initial questions</strong></td>
+    <td style="vertical-align: top;">How does the success and failure rate of the NCT’s vary over years?</td>
+    </tr>
+    </tbody>
+    </table>
+    <hr />
+  <div id="vis" class="container"></div>
+  <script type="text/javascript">
+    var yourVlSpec =  {
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/shrinidhiisundar/shrini/master/nct%20data.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.YearOfBirth > 1974"
+    },
+    {
+      "calculate": "'Cars Tested '",
+      "as": "Cars Tested "
+    },
+    {
+      "calculate": "'Cars Passed'",
+      "as": "Cars Passed"
+    },
+    {
+      "calculate": "'Cars Failed'",
+      "as": "Cars Failed"
+    }
+  ],
+  "title": {
+    "text": "Success and failure rate of Cars in NCT ",
+    "anchor": "middle",
+    "fontSize": 18
+  },
+  "width": 600,
+  "height": 450,
+  "layer": [
+    {
+      "mark": "area",
+      "encoding": {
+        "x": {
+          "field": "YearOfBirth",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "Total",
+          "type": "quantitative",
+          "aggregate": "mean",
+          "axis": {
+            "title": "Mean Total number of Cars"
+          }
+        },
+        "color": {
+          "field": "Cars Tested ",
+          "type": "nominal",
+          "title": null,
+          "scale": {
+            "range": [
+              "orange",
+              "red",
+              "green"
+            ]
+          }
+        },
+        "tooltip": {
+          "field": "Total",
+          "type": "quantitative",
+          "aggregate": "sum"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "area"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearOfBirth",
+          "type": "temporal"
+        },
+        "y": {
+          "field": "PASS",
+          "type": "quantitative",
+          "aggregate": "mean"
+        },
+        "color": {
+          "field": "Cars Passed",
+          "type": "nominal",
+          "title": null
+        },
+        "tooltip": {
+          "field": "PASS",
+          "type": "quantitative",
+          "aggregate": "sum"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "area"
+      },
+      "encoding": {
+        "x": {
+          "field": "YearOfBirth",
+          "type": "temporal",
+          "axis": {
+            "title": "Year of Vehicle"
+          }
+        },
+        "y": {
+          "field": "FAIL",
+          "type": "quantitative",
+          "aggregate": "mean"
+        },
+        "color": {
+          "field": "Cars Failed",
+          "type": "nominal",
+          "title": null
+        },
+        "tooltip": {
+          "field": "FAIL",
+          "type": "quantitative",
+          "aggregate": "sum"
+        }
+      }
+    }
+  ]
+}
+
+        vegaEmbed("#vis", yourVlSpec);
+  </script>
+    <hr />
+<table style="width: 850px;" cellspacing="5" cellpadding="5">
+<tbody>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+<td style="vertical-align: top;">This layered plot has three plots overlapping one on top of the other which shows:
+(1) Relationship between Year of vehicle and Total Cars tested in NCT
+(2) Relationship between Year of vehicle and Total Cars that passed in NCT
+(3) Relationship between Year of vehicle and Total Cars that failed in NCT
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Insight:</strong></td>
+<td style="vertical-align: top;">It can be concluded from the visualization that until 2007 more cars failed in NCT than passed. After 2007, more cars passed NCT, thus showing that newer vehicles have a greater pass percentage while the older once had a greater fail percentage. 
+Also, it can be noticed that between the years 1974 and 2007, there’s a similarity in shape of the Mean of total cars vs Year of vehicle graph and Mean of failed cars vs Year of Vehicle graph and from 2007 to 2016, there’s a similarity in shape of the Mean of total cars vs Year of vehicle graph and Mean of passed cars vs Year of Vehicle graph.
+ </td>
+</tr>
+<tr>
+<td style="vertical-align: top;"><strong>Design considerations</strong></td>
+<td style="vertical-align: top;">I’ve used a layered plot to show how the success and failure rate of NCT’s vary over years. I’ve also plotted the Total NCT tests to visually understand the proportion of the success and the failure rates. I’ve used the mark encoding to be ‘area’ as I found it to be a better alternative than ‘line’ and ‘bar’ encodings. With that data having many points clustered between 2006 – 2011, ‘area’ encoding represents the data accurately and concisely. The chosen color scheme also enhances the visualization.
+While the graph is plotted with the mean of Total, Pass & Failed Cars, I’ve added a tooltip displaying the sum of Total, Pass & Failed Cars when the cursor is hovered over the graph. However, this graph has its own disadvantages; since the graphs are imposed one of top of the other, overlapping data is missed out. Here the pass rate until the year 2007 is not shown as it is overlapped by the fail rate. Regardlelss, I’ve also added proper labelling and legends to make clear of what the visualization represents and how layering adds benefit to it.
+</td>
+</tr>
+<tr>
+<td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+<td style="vertical-align: top;">The dataset has details about the NCT’s conducted from the year 1932. But the number of tests conducted between 1932 – 1974 were very less and compared to the once conducted later. Upon testing the data from 1932 – 2016 in Tableau, it was only observed that plot between the years 1932 – 1974 was just overlapping with the x-axis. Hence this visualization only uses cars which underwent NCT after 1974. Also, three calculate functions are done for the purpose of displaying the legends</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
